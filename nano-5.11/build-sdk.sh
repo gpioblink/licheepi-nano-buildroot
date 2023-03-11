@@ -1,4 +1,4 @@
-#/bin/usr/env bash -xe
+#/bin/bash -xe
 
 BUILDROOT_RELEASE="2020.02"
 

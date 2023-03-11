@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -xe
+#!/bin/bash -xe
 
 # if the directory is empty, init sdk
 if [! -d ${DOCKER_WORKDIR}/licheepi-nano ]; then

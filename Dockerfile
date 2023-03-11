@@ -57,7 +57,7 @@ RUN echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER} && \
 # outside the container, on host directories, as docker volumes.
 ARG host_uid \
     host_gid
-RUN groupadd -g $host_gid nxp && \
+RUN groupadd -g $host_gid zli && \
     useradd -g $host_gid -m -s /bin/bash -u $host_uid $USER
 
 # builds should run as a normal user.

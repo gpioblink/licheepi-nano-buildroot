@@ -1,5 +1,7 @@
 #/bin/sh -xe
 
+DOCKER_IMAGE_TAG="nano-5.11"
+
 DOCKER_WORKDIR="/opt/nanowork"
 
 RELEASE_NAME=${PWD##*/}
