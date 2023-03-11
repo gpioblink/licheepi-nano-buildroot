@@ -1,10 +1,5 @@
 FROM ubuntu:18.04 AS base
 
-# Buildroot release version
-ARG BUILDROOT_RELEASE=2020.02
-
-ENV DEBIAN_FRONTEND=noninteractive
-
 # cache apt-get update results
 RUN apt-get update
 
@@ -37,62 +32,37 @@ RUN apt-get install -qy \
     texinfo \
     unzip \
     wget \
-    whiptail
+    whiptail \
+    xterm \
+    x11-apps \
+    gawk wget git-core diffstat unzip texinfo \
+    gcc-multilib build-essential chrpath socat cpio python python3 \
+    python3-pip python3-pexpect xz-utils debianutils iputils-ping \
+    libsdl1.2-dev xterm tar locales net-tools rsync sudo nano vim curl zstd liblz4-tool
 
 # external toolchain needs this
-RUN update-locale LC_ALL=C
+# Set up locales
+# Set up locales
+RUN locale-gen en_US.UTF-8 && \
+    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
 
-# get Buildroot image
-WORKDIR /root/buildroot
-RUN wget -qO- http://buildroot.org/downloads/buildroot-${BUILDROOT_RELEASE}.tar.gz | tar --strip-components=1 -xz
+# Add your user to sudoers to be able to install other packages in the container.
+ARG USER
+RUN echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER} && \
+    chmod 0440 /etc/sudoers.d/${USER}
 
-# build the cross-compilation toolchain as a separate cacheable image
-FROM base AS sdk
+# Set the arguments for host_id and user_id to be able to save the build artifacts
+# outside the container, on host directories, as docker volumes.
+ARG host_uid \
+    host_gid
+RUN groupadd -g $host_gid nxp && \
+    useradd -g $host_gid -m -s /bin/bash -u $host_uid $USER
 
-# configure a skeleton setup for `make sdk` only at first
-# (we take special care to not include other unrelated config files)
-WORKDIR /root/licheepi-nano-sdk
-RUN echo 'name: LICHEEPI_NANO_SDK' >> external.desc
-RUN echo 'desc: LicheePi Nano SDK only' >> external.desc
-RUN touch external.mk Config.in
-COPY configs/licheepi_nano_sdk_defconfig configs/
+# builds should run as a normal user.
+USER $USER
 
-# compile the SDK (this takes a while!)
-WORKDIR /root/buildroot
-RUN BR2_EXTERNAL=/root/licheepi-nano-sdk make licheepi_nano_sdk_defconfig
+ARG DOCKER_WORKDIR
+WORKDIR ${DOCKER_WORKDIR}
 
-RUN make sdk
-
-# start main build using the generated toolchain bundle
-FROM base AS main
-
-# copy over the SDK tarball (keeping the name)
-COPY --from=sdk /root/buildroot/output/images/arm-buildroot-linux-gnueabi_sdk-buildroot.tar.gz /root/
-
-# copy over the main config
-WORKDIR /root/licheepi-nano
-COPY board/ board/
-COPY configs/ configs/
-COPY \
-    Config.in \
-    external.desc \
-    external.mk \
-    ./
-
-# set up the defconfig
-WORKDIR /root/buildroot
-RUN BR2_EXTERNAL=/root/licheepi-nano make licheepi_nano_defconfig
-
-# prep the toolchain from the tarball
-RUN make toolchain
-
-# prepare for builds (broken out separately to cache more granularly, especially Linux source fetch)
-RUN make linux-source
-RUN make uboot-source
-
-# run the main build command
-RUN make
-
-# expose built image files in standalone root folder
-FROM scratch AS dist
-COPY --from=main /root/buildroot/output/images/ .
