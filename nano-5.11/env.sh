@@ -2,6 +2,7 @@
 
 DOCKER_IMAGE_TAG="nano-5.11"
 
+# if you change DOCKER_WORKDIR, please also change BR2_TOOLCHAIN_EXTERNAL_URL in the defconfig
 DOCKER_WORKDIR="/opt/nanowork"
 
 RELEASE_NAME="nano-5.11"
