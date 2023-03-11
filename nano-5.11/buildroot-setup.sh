@@ -9,6 +9,7 @@ if [ ! -d ${DOCKER_WORKDIR}/licheepi-nano-sdk ]; then
 fi
 
 if [ ! -d ${DOCKER_WORKDIR}/licheepi-nano ]; then
+	mkdir -p ${DOCKER_WORKDIR}/licheepi-nano
 	cp -r ${BUILDROOT_OVERRIDES_DIR}/* ${DOCKER_WORKDIR}/licheepi-nano
 fi
 
