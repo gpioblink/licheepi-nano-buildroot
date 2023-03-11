@@ -4,8 +4,8 @@ source ./env.sh
 
 BUILDROOT_RELEASE="2020.02"
 
-cd ${DOCKER_WORKDIR}
 mkdir -p ${DOCKER_WORKDIR}/buildroot
+cd ${DOCKER_WORKDIR}/buildroot
 
 wget -qO- http://buildroot.org/downloads/buildroot-${BUILDROOT_RELEASE}.tar.gz | tar --strip-components=1 -xz
 

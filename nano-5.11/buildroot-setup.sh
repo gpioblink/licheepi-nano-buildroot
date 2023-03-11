@@ -3,13 +3,13 @@
 source ./env.sh
 
 # if the directory is empty, init sdk
-if [ ! -d ${DOCKER_WORKDIR}/licheepi-nano ]; then
-	./build-sdk.sh
+if [ ! -d ${DOCKER_WORKDIR}/buildroot ]; then
+	bash -xe build-sdk.sh
 	cp -r ${BUILDROOT_OVERRIDES_DIR}/* ${DOCKER_WORKDIR}/buildroot
 fi
 
 cd ${DOCKER_WORKDIR}/buildroot
-make toolchian
+make toolchain
 
 make linux-source
 make uboot-source
