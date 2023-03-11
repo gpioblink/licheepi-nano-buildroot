@@ -1,7 +1,9 @@
 #!/bin/bash -xe
 
+source ./env.sh
+
 # if the directory is empty, init sdk
-if [! -d ${DOCKER_WORKDIR}/licheepi-nano ]; then
+if [ ! -d ${DOCKER_WORKDIR}/licheepi-nano ]; then
 	./build-sdk.sh
 	cp -r ${BUILDROOT_OVERRIDES_DIR}/* ${DOCKER_WORKDIR}/buildroot
 fi

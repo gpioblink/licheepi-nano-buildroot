@@ -1,5 +1,7 @@
 #/bin/bash -xe
 
+source ./env.sh
+
 BUILDROOT_RELEASE="2020.02"
 
 cd ${DOCKER_WORKDIR}

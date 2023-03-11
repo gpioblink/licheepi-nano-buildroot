@@ -1,10 +1,10 @@
-#/bin/sh -xe
+#/bin/bash -xe
 
 DOCKER_IMAGE_TAG="nano-5.11"
 
 DOCKER_WORKDIR="/opt/nanowork"
 
-RELEASE_NAME=${PWD##*/}
+RELEASE_NAME="nano-5.11"
 
 BUILDROOT_DIR="${DOCKER_WORKDIR}/${RELEASE_NAME}-build"
 
