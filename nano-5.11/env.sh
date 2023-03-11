@@ -10,5 +10,5 @@ BUILDROOT_DIR="${DOCKER_WORKDIR}/${RELEASE_NAME}-build"
 
 SDK_TARBALL_PATH="/root/buildroot/output/images/arm-buildroot-linux-gnueabi_sdk-buildroot.tar.gz"
 
-BUILDROOT_OVERRIDES_DIR="./overrides"
+BUILDROOT_OVERRIDES_DIR="${DOCKER_WORKDIR}/${RELEASE_NAME}/overrides"
 
