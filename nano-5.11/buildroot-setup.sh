@@ -12,6 +12,7 @@ fi
 if [ ! -d ${DOCKER_WORKDIR}/licheepi-nano ]; then
 	mkdir -p ${DOCKER_WORKDIR}/licheepi-nano
 	cp -r ${BUILDROOT_OVERRIDES_DIR}/* ${DOCKER_WORKDIR}/licheepi-nano
+	chmod 755 ${DOCKER_WORKDIR}/licheepi-nano/board/licheepi_nano/post-image.sh
 fi
 
 cd ${DOCKER_WORKDIR}/buildroot
