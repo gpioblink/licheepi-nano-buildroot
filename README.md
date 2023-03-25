@@ -5,8 +5,8 @@
 ## Installation
 
 ```
-./docker-build Dockerfile
-./docker-run
+./docker-build.sh Dockerfile
+./docker-run.sh
 $ cd nano-5.11
-$ ./buildroot-setup.sh
+$ . ./buildroot-setup.sh
 ```
